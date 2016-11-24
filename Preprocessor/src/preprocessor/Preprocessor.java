@@ -30,6 +30,7 @@ public class Preprocessor {
             
             // Output
             outputDataToCSV(data, "data-preprocessed");
+
             
         } catch (IOException ex) {
             Logger.getLogger(Preprocessor.class.getName()).log(Level.SEVERE, null, ex);
@@ -74,7 +75,8 @@ public class Preprocessor {
         
         String normalizedSentence;
         for (int i = 0; i < data.size(); i++) {
-            normalizedSentence = sentenceFormalization.normalizeSentence(data.get(i).getTweet());
+            normalizedSentence = removeCurrency(data.get(i).getTweet());
+            normalizedSentence = sentenceFormalization.normalizeSentence(normalizedSentence);
             normalizedSentence = sentenceFormalization.deleteStopword(normalizedSentence);
             
             data.get(i).setTweet(normalizedSentence);
@@ -93,5 +95,11 @@ public class Preprocessor {
             String[] instanceString = {instance.getTweet(), Integer.toHexString(instance.getClassNum())};
             writer.writeNext(instanceString);
         }
+    }
+    
+    public static String removeCurrency(String sentence) {
+        sentence = sentence.toLowerCase();
+        String removedCurrency = sentence.replaceAll("rp[\\.|,| ][\\d][\\d+|\\.|,|ribu|ratus|juta|k| ]+", "nozharga ");
+        return removedCurrency;
     }
 }
