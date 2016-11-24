@@ -17,6 +17,7 @@ public class InformationExtraction {
     
     public final static String REGEX_PRICE = "(rp|idr|harga)(\\.|,| )*(\\d)(\\d+|\\.|,)*( ?ribu| ?ratus| ?juta| ?k| ?rb| ?jt)*";
     public final static String REGEX_NOMINAL = "[\\d|\\.]+";
+    public final static String REGEX_PHONE = "(08|\\+?628|02\\d)(\\d{9,11})";
     
     private InformationSell infoSell;
     private String tweet;
@@ -42,8 +43,6 @@ public class InformationExtraction {
             extractHarga = "0";
         }
         
-        System.out.println(extractHarga);
-        
         Double harga = extractPrice(extractHarga, matcher.group(5));
         infoSell.setPrice(harga);
     }
@@ -68,5 +67,20 @@ public class InformationExtraction {
         }
         
         return temp;
+    }
+    
+    public void iePhone(){
+        // Goal: Extract nomor ponsel pada tweet -> infoSell
+        String extractPhone;
+        Pattern pattern = Pattern.compile(REGEX_PHONE);
+        Matcher matcher = pattern.matcher(tweet);
+        
+        if(matcher.find()){
+            extractPhone = matcher.group(0);
+        }else{
+            extractPhone = "-";
+        }
+        
+        infoSell.setPhone(extractPhone);
     }
 }
