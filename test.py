@@ -11,8 +11,15 @@ auth.set_access_token(access_token, access_secret)
 api = tweepy.API(auth)
 
 query = "jual -filter:retweets"
-results = api.search(q=query, count=100, )
-print len(results)
-for tweet in results:
-    dicts = { "tweets": tweet.text.replace("\n", " ") , "created_at" : tweet.created_at.strftime('%H:%M %d %B %Y') }
-    print dicts
+
+tweets = []
+
+max_id = None
+
+for i in xrange(50):
+    results = api.search(q=query, count=100, max_id=max_id)
+    max_id = results[-1].id - 1
+    tweets.extend(results)
+
+for tweet in tweets:
+    print str(tweet.id) + "\t" + tweet.text.encode("utf-8").replace("\n", " ") + "\t" + tweet.created_at.strftime('%d %B %Y, %H:%M:%S')
