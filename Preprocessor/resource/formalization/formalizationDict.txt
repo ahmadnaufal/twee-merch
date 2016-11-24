@@ -1,5 +1,6 @@
 7an	tujuan
 @	di
+a/n	atas nama
 ababil	abg labil
 abis	habis
 acc	accord
@@ -105,6 +106,7 @@ beud	banget
 beut	banget
 bg	abang
 bgd	banget
+bgi	bagi
 bgmn	bagaimana
 bgs	bagus
 bgt	banget
@@ -413,6 +415,7 @@ houm	rumah
 hr	hari
 hrs	harus
 hrus	harus
+hub	hubung
 hubad	hubungan angkatan darat
 hubdar	perhubungan darat
 hubla	perhubungan laut
@@ -861,7 +864,7 @@ pisan	sangat
 pisgor	pisang goreng
 pk	penjahat kelamin
 pke	pakai
-plg	paling
+plg	pelanggan
 pm	private message
 pmrnth	pemerintah
 pny	punya
@@ -906,6 +909,7 @@ rhs	rahasia
 rmbt	rambut
 rmh	rumah
 rofl	rolling on the floor laughing
+rp	rupiah
 ru	baru
 rudal	peluru kendali
 ruko	rumah toko

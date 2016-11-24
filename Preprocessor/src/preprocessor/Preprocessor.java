@@ -1,6 +1,7 @@
 package preprocessor;
 
 import IndonesianNLP.IndonesianSentenceFormalization;
+import IndonesianNLP.IndonesianStemmer;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import java.io.FileNotFoundException;
@@ -20,9 +21,14 @@ public class Preprocessor {
     public static void main(String[] args) {
         ArrayList<Instance> data = new ArrayList<>();
         try {
+            // Read data into csv
             data = (ArrayList<Instance>) readCSVToList("dataset.csv");
             
+            // Preprocessing
             normalizeData(data);
+            stemData(data);
+            
+            // Output
             outputDataToCSV(data, "data-preprocessed");
             
         } catch (IOException ex) {
@@ -50,14 +56,27 @@ public class Preprocessor {
         return data;
     }
     
+    public static void stemData(List<Instance> data) {
+        IndonesianStemmer stemmer = new IndonesianStemmer();
+        for (int i = 0; i < data.size(); i++) {
+            String stemmedSentence = stemmer.stemSentence(data.get(i).getTweet());
+            data.get(i).setTweet(stemmedSentence);
+        }
+    }
+    
     /**
-     * Normalize list of Instance
+     * Normalize and remove stop words
      * @param data list of Instance
      */
     public static void normalizeData(List<Instance> data) {
         IndonesianSentenceFormalization sentenceFormalization = new IndonesianSentenceFormalization();
+        sentenceFormalization.initStopword();
+        
+        String normalizedSentence;
         for (int i = 0; i < data.size(); i++) {
-            String normalizedSentence = sentenceFormalization.normalizeSentence(data.get(i).getTweet());
+            normalizedSentence = sentenceFormalization.normalizeSentence(data.get(i).getTweet());
+            normalizedSentence = sentenceFormalization.deleteStopword(normalizedSentence);
+            
             data.get(i).setTweet(normalizedSentence);
         }
     }
