@@ -99,7 +99,7 @@ public class Preprocessor {
     
     public static String removeCurrency(String sentence) {
         sentence = sentence.toLowerCase();
-        String removedCurrency = sentence.replaceAll("rp[\\.|,| ][\\d][\\d+|\\.|,|ribu|ratus|juta|k| ]+", "nozharga ");
+        String removedCurrency = sentence.replaceAll("(harga|rp|idr)(\\.|,| )*(\\d)(\\d+|\\.|,|ribu|ratus|juta|jt|k|rb| )*", " nozharga ");
         return removedCurrency;
     }
 }
