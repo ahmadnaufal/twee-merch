@@ -18,7 +18,7 @@ public class InformationSell {
     private Double price;       // Done
     private String phone;       // Done
     private String email;       // Done
-    private String link;
+    private String link;        // Done
     private Map contacts;
     
     public InformationSell(){}

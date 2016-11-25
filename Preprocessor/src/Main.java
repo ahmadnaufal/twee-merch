@@ -16,15 +16,16 @@ public class Main {
     
     public static void main(String[] args) {
         
-        String tweet = "Di Jual jersey seharga 125rb sudah ongkir via JNE, kalau mau COD di Lbk.Bulus , Ciputat, Depok (Nama dan Nomor punggung cp : 081314406127)";
+        String tweet = "Di jual macbook pro retina harga 125rb sudah ongkir via JNE, fauzan@gmail.com kalau mau COD di Lbk.Bulus , Ciputat, Depok (Nama dan Nomor punggung cp : 081314406127)";
         InformationExtraction ie = new InformationExtraction(tweet);
-        ie.iePrice();
-        ie.iePhone();
+        ie.ieAll();
         
         InformationSell infoSell = ie.getInformationSell();
+        System.out.print(infoSell.getItemName()+"\n");
         System.out.print(infoSell.getPrice().toString()+"\n");
         System.out.print(infoSell.getPhone()+"\n");
+        System.out.print(infoSell.getEmail()+"\n");
         
-        System.out.println(InformationExtraction.makeUniform(InformationExtraction.UNIFORM_PHONE, tweet));
+        System.out.println(InformationExtraction.makeUniform(InformationExtraction.UNIFORM_ALL, tweet));
     }
 }
