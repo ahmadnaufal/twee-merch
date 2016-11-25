@@ -16,12 +16,15 @@ public class Main {
     
     public static void main(String[] args) {
         
-        InformationExtraction ie = new InformationExtraction("Di Jual jersey seharga 125rb sudah ongkir via JNE, kalau mau COD di Lbk.Bulus , Ciputat, Depok (Nama dan Nomor punggung cp : 081314406127)");
+        String tweet = "Di Jual jersey seharga 125rb sudah ongkir via JNE, kalau mau COD di Lbk.Bulus , Ciputat, Depok (Nama dan Nomor punggung cp : 081314406127)";
+        InformationExtraction ie = new InformationExtraction(tweet);
         ie.iePrice();
         ie.iePhone();
         
         InformationSell infoSell = ie.getInformationSell();
         System.out.print(infoSell.getPrice().toString()+"\n");
         System.out.print(infoSell.getPhone()+"\n");
+        
+        System.out.println(InformationExtraction.makeUniform(InformationExtraction.UNIFORM_PHONE, tweet));
     }
 }

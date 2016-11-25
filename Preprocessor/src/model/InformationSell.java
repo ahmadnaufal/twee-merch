@@ -15,9 +15,9 @@ import java.util.Map;
 public class InformationSell {
     private String sellerName;  // Important!
     private String itemName;    // Important!
-    private Double price;
-    private String phone;
-    private String email;
+    private Double price;       // Done
+    private String phone;       // Done
+    private String email;       // Done
     private String link;
     private Map contacts;
     

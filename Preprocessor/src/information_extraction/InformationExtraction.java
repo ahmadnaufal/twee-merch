@@ -21,6 +21,12 @@ public class InformationExtraction {
     public final static String REGEX_MAIL = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
     public final static String REGEX_LINK = "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
     
+    public final static String UNIFORM_ALL = "_ALL_";
+    public final static String UNIFORM_PRICE = "_PRICE_";
+    public final static String UNIFORM_PHONE = "_PHONE_";
+    public final static String UNIFORM_MAIL = "_MAIL_";
+    public final static String UNIFORM_LINK = "_LINK_";
+    
     private InformationSell infoSell;
     private String tweet;
     
@@ -120,4 +126,46 @@ public class InformationExtraction {
         
         infoSell.setEmail(extractLink);
     }
+    
+    public static String unifiedProcess(String regex, String text, String alter){
+        String matchedString;
+        String result = text;
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(result);
+        if(matcher.find()){
+            matchedString = matcher.group(0);
+            result = result.replace(matchedString, alter);
+        }
+        return result;
+    }
+    
+    public static String makeUniform(String option, String tweet){
+        String temp = tweet;
+        
+        switch(option){
+            case UNIFORM_ALL:
+                temp = unifiedProcess(REGEX_PRICE, temp, UNIFORM_PRICE);
+                temp = unifiedProcess(REGEX_PHONE, temp, UNIFORM_PHONE);
+                temp = unifiedProcess(REGEX_MAIL, temp, UNIFORM_MAIL);
+                temp = unifiedProcess(REGEX_LINK, temp, UNIFORM_LINK);
+                break;
+            case UNIFORM_PRICE:
+                temp = unifiedProcess(REGEX_PRICE, temp, UNIFORM_PRICE);
+                break;
+            case UNIFORM_PHONE:
+                temp = unifiedProcess(REGEX_PHONE, temp, UNIFORM_PHONE);
+                break;
+            case UNIFORM_MAIL:
+                temp = unifiedProcess(REGEX_MAIL, temp, UNIFORM_MAIL);
+                break;
+            case UNIFORM_LINK:
+                temp = unifiedProcess(REGEX_LINK, temp, UNIFORM_LINK);
+                break;
+            default:
+                break;
+        }
+        
+        return temp;
+    }
+    
 }
