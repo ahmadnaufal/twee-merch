@@ -16,8 +16,8 @@ public class Main {
     
     public static void main(String[] args) {
         
-        String tweet = "Di jual macbook pro retina harga 125rb sudah ongkir via JNE, fauzan@gmail.com kalau mau COD di Lbk.Bulus , Ciputat, Depok (Nama dan Nomor punggung cp : 081314406127)";
-        InformationExtraction ie = new InformationExtraction(tweet);
+        String tweet = "Di jual parfum oriflame giordani man notte ..... Harga 385000 area tembilahan https://t.co/2k4GwNywhu";
+        InformationExtraction ie = new InformationExtraction(tweet.toLowerCase());
         ie.ieAll();
         
         InformationSell infoSell = ie.getInformationSell();
@@ -26,6 +26,6 @@ public class Main {
         System.out.print(infoSell.getPhone()+"\n");
         System.out.print(infoSell.getEmail()+"\n");
         
-        System.out.println(InformationExtraction.makeUniform(InformationExtraction.UNIFORM_ALL, tweet));
+        System.out.println(InformationExtraction.makeUniform(InformationExtraction.UNIFORM_ALL, tweet.toLowerCase()));
     }
 }

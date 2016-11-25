@@ -71,16 +71,17 @@ public class InformationExtraction {
     public void iePrice(){
         // Goal: Extract harga pada tweet -> infoSell
         String extractHarga;
+        Double harga= 0.0;
         Pattern pattern = Pattern.compile(REGEX_PRICE);
         Matcher matcher = pattern.matcher(tweet);
         
         if(matcher.find()){
             extractHarga = matcher.group(0);
+            harga = extractPrice(extractHarga, matcher.group(5));
         }else{
             extractHarga = "0";
         }
         
-        Double harga = extractPrice(extractHarga, matcher.group(5));
         infoSell.setPrice(harga);
     }
     
@@ -94,13 +95,15 @@ public class InformationExtraction {
             temp = Double.parseDouble(matcher.group(0));
         }
         
-        if(endPoint.contains("ratus")){
-            temp = temp*100;
-        }
-        if(endPoint.contains("juta")||endPoint.contains("jt")){
-            temp = temp*1000000;
-        }else if(endPoint.contains("ribu")||endPoint.contains("rb")||endPoint.contains("k")){
-            temp = temp*1000;
+        if(endPoint != null){
+            if(endPoint.contains("ratus")){
+                temp = temp*100;
+            }
+            if(endPoint.contains("juta")||endPoint.contains("jt")){
+                temp = temp*1000000;
+            }else if(endPoint.contains("ribu")||endPoint.contains("rb")||endPoint.contains("k")){
+                temp = temp*1000;
+            }
         }
         
         return temp;
