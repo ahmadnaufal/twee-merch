@@ -37,11 +37,27 @@ public class TweetGet {
         query.setCount(20);
         QueryResult result;
         try {
-//            do {
-                result = twitter.search(query);
-                tweets = result.getTweets();
-//            } while ((query = result.nextQuery()) != null);
+            result = twitter.search(query);
+            tweets = result.getTweets();
             
+        } catch (TwitterException te) {
+            te.printStackTrace();
+            System.out.println("Failed to search tweets: " + te.getMessage());
+        }
+    }
+    
+    public void getTweetFromUser(String username) {
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey("2MZnm7LM7Ik9W3hzcXJOBaNER")
+                .setOAuthConsumerSecret("0GER2kH3o1gOAyfPEDd870Iiuiu6XbQDayAXWfUBxU5APg4Le6")
+                .setOAuthAccessToken("18972247-HgBP0djVaLw4U9fSX4lUdhKpZcqsJIAgnUCW3DRS5")
+                .setOAuthAccessTokenSecret("bn8EQoOyGSRVUNX6elTmX9Wt9jiFJaxDaCZDk3U3hQB0g");
+
+        Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+        
+        try {
+            tweets = twitter.getUserTimeline(username);
         } catch (TwitterException te) {
             te.printStackTrace();
             System.out.println("Failed to search tweets: " + te.getMessage());

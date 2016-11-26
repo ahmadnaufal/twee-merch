@@ -5,6 +5,8 @@
  */
 package twitter;
 
+import java.util.List;
+
 /**
  *
  * @author Husni Munaya
@@ -12,6 +14,10 @@ package twitter;
 public class TweetTest {
     public static void main(String[] args) {
         TweetGet tweet = new TweetGet();
-        tweet.query("jual");
+        tweet.getTweetFromUser("tweemerch");
+        List<MyStatus> stats = tweet.getTweet();
+        for (MyStatus status : stats) {
+            System.out.println(status.getTweet());
+        }
     }
 }
