@@ -16,7 +16,7 @@ public class Main {
     
     public static void main(String[] args) {
         
-        String tweet = "Di jual parfum oriflame giordani man notte ..... Harga 385000 area tembilahan https://t.co/2k4GwNywhu";
+        String tweet = "Jual Iphone 5 16gb ios 10 https://t.co/W0VeodNqXF";
         InformationExtraction ie = new InformationExtraction(tweet.toLowerCase());
         ie.ieAll();
         
