@@ -50,6 +50,9 @@
                         <div class="item-name"><span class="item-attr">Barang</span><%= infoSell.getItemName() %></div>
                         <div class="price"><span class="item-attr">Harga</span><%= infoSell.getPrice() %></div>
                         <div class="contact"><span class="item-attr">Kontak</span><%= infoSell.getPhone() %></div>
+                        <% if(infoSell.getLink().contains("http")){ %>
+                            <div><a href="<%= infoSell.getLink() %>">Laman Jual</a></div>
+                        <% } %>
                         <div class="original">
                             <div class="original-tweet">
                                 <strong>Original Tweet</strong>
