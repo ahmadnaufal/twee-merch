@@ -45,6 +45,10 @@ public class SellerClassifier {
         return instances;
     }
     
+    public void loadModel(String path) throws Exception {
+        myClassifier = (Classifier) SerializationHelper.read(path);
+    }
+    
     private Instances startFeatureExtraction(Instances raw) throws Exception {
         StringToWordVector filter = new StringToWordVector();
         Tokenizer tokenizer = new WordTokenizer();
@@ -57,6 +61,7 @@ public class SellerClassifier {
     public void buildModel(String dataset) {
         try {
             myInstances = startFeatureExtraction(loadData(dataset));
+            System.out.println(myInstances);
             myClassifier = new RandomForest();
             
             // build the model
@@ -71,6 +76,7 @@ public class SellerClassifier {
         try {
             String processedTweet = Preprocessor.preProcessString(tweet.getTweet());
             Instance instance = readToInstance(processedTweet);
+            System.out.println(instance);
             double tweetClass = myClassifier.classifyInstance(instance);
             
             tweet.setClassification((int) tweetClass);
@@ -85,7 +91,8 @@ public class SellerClassifier {
     private Instance readToInstance(String str) throws Exception {
         File f = new File("buffer.arff");
         try (FileWriter fw = new FileWriter(f, false)) {
-            fw.write(str);
+            fw.write("@relation buffer\n\n@attribute\ttweet\tstring\n@attribute\tclass\t{0,1}\n@data\n");
+            fw.write("\"" + str + "\",1\n");
         }
         
         Instances instances = startFeatureExtraction(loadData("buffer.arff"));

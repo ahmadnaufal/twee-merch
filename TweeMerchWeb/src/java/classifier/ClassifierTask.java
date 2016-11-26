@@ -5,7 +5,11 @@
  */
 package classifier;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import twitter.MyStatus;
+import twitter.TweetGet;
 
 /**
  *
@@ -13,15 +17,28 @@ import twitter.MyStatus;
  */
 public class ClassifierTask {
         
-    SellerClassifier sc = new SellerClassifier();
+    public static void main(String[] args) {
+        SellerClassifier sc = new SellerClassifier();
+        
+        try {
+            sc.buildModel("data/training.arff");
+//            sc.loadModel("model/seller_classify_model.model");
+        } catch (Exception ex) {
+            Logger.getLogger(ClassifierTask.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TweetGet tg = new TweetGet();
+        tg.query("jual");
+        List<MyStatus> tweets = tg.getTweet();
+        
+        for (int i = 0; i < tweets.size(); ++i) {
+            System.out.println(sc.classifyTweet(tweets.get(i)));
+        }
+    }
         
     public void runClassifier() {
-        sc.buildModel("data/training.arff");
     }
 
     public void classifyTweets(MyStatus[] tweets) {
-        for (int i = 0; i < tweets.length; ++i) {
-            sc.classifyTweet(tweets[i]);
-        }
     }
 }
