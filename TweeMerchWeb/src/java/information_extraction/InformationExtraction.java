@@ -56,6 +56,9 @@ public class InformationExtraction {
         if(matcher.find()){
             if(matcher.group(3)!=null){
                 extractItem = matcher.group(3);
+                if(extractItem.contains(" https")){
+                    extractItem = extractItem.replaceFirst(" ?https?", "");
+                }
             }else if(matcher.group(5)!=null){
                 extractItem = matcher.group(5);
             }else{
