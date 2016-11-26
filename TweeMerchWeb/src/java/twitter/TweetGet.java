@@ -5,6 +5,8 @@
  */
 package twitter;
 
+import classifier.SellerClassifier;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -66,16 +68,29 @@ public class TweetGet {
     
     public List<MyStatus> getTweet() {
         List<MyStatus> stats = new ArrayList<>();
+        SellerClassifier sc = new SellerClassifier();
+        try {
+            File file =  new File(".");
+            System.out.println("PATH: " + file.getAbsolutePath());
+            sc.initModel("data\\training.arff");
+        } catch (Exception ex) {
+            Logger.getLogger(TweetGet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         for (Status tweet : tweets) {
             MyStatus myStatus = new MyStatus();
-            myStatus.setClassification(1);
             myStatus.setTweet(tweet.getText());
             myStatus.setStatusId(tweet.getId());
             myStatus.setUsername(tweet.getUser().getName());
             myStatus.setUserScreenName(tweet.getUser().getScreenName());
             myStatus.setImageUrl(tweet.getUser().getProfileImageURLHttps());
             
-            stats.add(myStatus);
+            int classRes = (int) sc.classifyTweet(myStatus);
+            
+            if (classRes == 1) {
+                myStatus.setClassification(classRes);
+                stats.add(myStatus);
+            }
         }
         
         return stats;

@@ -35,7 +35,10 @@ public class SellerClassifier {
     
     private Classifier myClassifier;
     private Instances myInstances;
-    private Filter mFilter;
+    private Filter myFilter;
+    
+    public static final String modelPath = "ref\\seller_classify_model.model";
+    public static final String refPath = "ref\\seller_classify_filter.filter";
     
     private Instances loadData(String dataset) throws Exception {
         DataSource data = new DataSource(dataset);
@@ -47,26 +50,30 @@ public class SellerClassifier {
         return instances;
     }
     
-    public void loadModel(String path) throws Exception {
+    private void loadModelFile(String path) throws Exception {
         myClassifier = (Classifier) SerializationHelper.read(path);
     }
     
-    private Instances startFeatureExtraction(Instances raw) throws Exception {
-        mFilter = new StringToWordVector();
-        mFilter.setInputFormat(raw);
-        
-        return Filter.useFilter(raw, mFilter);
+    private void loadFilterFile(String path) throws Exception {
+        myFilter = (Filter) SerializationHelper.read(path);
     }
     
-    public void buildModel(String dataset) {
+    private Instances startFeatureExtraction(Instances raw) throws Exception {
+        myFilter = new StringToWordVector();
+        myFilter.setInputFormat(raw);
+        
+        return Filter.useFilter(raw, myFilter);
+    }
+    
+    public void rebuildModel(String dataset) {
         try {
             myInstances = startFeatureExtraction(loadData(dataset));
-            System.out.println(myInstances);
             myClassifier = new RandomForest();
             
             // build the model
             myClassifier.buildClassifier(myInstances);
-            SerializationHelper.write("model/seller_classify_model.model", myClassifier);
+            SerializationHelper.write(modelPath, myClassifier);
+            SerializationHelper.write(refPath, myFilter);
         } catch (Exception ex) {
             Logger.getLogger(SellerClassifier.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -79,8 +86,6 @@ public class SellerClassifier {
             Instance instance = readToInstance(processedTweet);
             System.out.println(instance);
             double tweetClass = myClassifier.classifyInstance(instance);
-            
-            tweet.setClassification((int) tweetClass);
                     
             return tweetClass;
         } catch (Exception ex) {
@@ -92,14 +97,28 @@ public class SellerClassifier {
     private Instance readToInstance(String str) throws Exception {
         File f = new File("buffer.arff");
         try (FileWriter fw = new FileWriter(f, false)) {
-            fw.write("@relation buffer\n\n@attribute\ttweet\tstring\n@attribute\tclass\t{0,1}\n@data\n");
+            fw.write("@relation buffer\n\n@attribute\ttweet\tstring\n@attribute\tclass\t{0,1}\n\n@data\n");
             fw.write("\"" + str + "\",1\n");
         }
         
         Instances instances = loadData("buffer.arff");
         
-        Instances ins = Filter.useFilter(instances, mFilter);
+        System.out.println(instances);
+        
+        assert (instances != null);
+        assert (myFilter != null);
+        Instances ins = Filter.useFilter(instances, myFilter);
         
         return ins.firstInstance();
+    }
+    
+    public void initModel(String dataset) throws Exception {
+        File modelFile = new File(modelPath);
+        if (modelFile.exists()) {
+            loadModelFile(modelPath);
+            loadFilterFile(refPath);
+        } else {
+            rebuildModel(dataset);
+        }
     }
 }
