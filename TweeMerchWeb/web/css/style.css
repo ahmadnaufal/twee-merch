@@ -60,6 +60,10 @@ body {
     padding: 0.5em;
 }
 
+.original-tweet img {
+    max-width: 100%;
+}
+
 
 
 /* helper */
