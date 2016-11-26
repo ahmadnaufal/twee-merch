@@ -25,6 +25,7 @@ import weka.filters.unsupervised.attribute.StringToWordVector;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
 import weka.core.SerializationHelper;
+import weka.filters.unsupervised.attribute.Standardize;
 
 /**
  *
@@ -34,6 +35,7 @@ public class SellerClassifier {
     
     private Classifier myClassifier;
     private Instances myInstances;
+    private Filter mFilter;
     
     private Instances loadData(String dataset) throws Exception {
         DataSource data = new DataSource(dataset);
@@ -50,12 +52,10 @@ public class SellerClassifier {
     }
     
     private Instances startFeatureExtraction(Instances raw) throws Exception {
-        StringToWordVector filter = new StringToWordVector();
-        Tokenizer tokenizer = new WordTokenizer();
-        filter.setTokenizer(tokenizer);
-        filter.setInputFormat(raw);
+        mFilter = new StringToWordVector();
+        mFilter.setInputFormat(raw);
         
-        return Filter.useFilter(raw, filter);
+        return Filter.useFilter(raw, mFilter);
     }
     
     public void buildModel(String dataset) {
@@ -75,6 +75,7 @@ public class SellerClassifier {
     public double classifyTweet(MyStatus tweet) {
         try {
             String processedTweet = Preprocessor.preProcessString(tweet.getTweet());
+            System.out.println(processedTweet);
             Instance instance = readToInstance(processedTweet);
             System.out.println(instance);
             double tweetClass = myClassifier.classifyInstance(instance);
@@ -95,7 +96,10 @@ public class SellerClassifier {
             fw.write("\"" + str + "\",1\n");
         }
         
-        Instances instances = startFeatureExtraction(loadData("buffer.arff"));
-        return instances.firstInstance();
+        Instances instances = loadData("buffer.arff");
+        
+        Instances ins = Filter.useFilter(instances, mFilter);
+        
+        return ins.firstInstance();
     }
 }
