@@ -53,6 +53,13 @@ body {
     font-weight: 500;
 }
 
+.original {
+    border-radius: 5px;
+    border: 1px solid #CCC;
+    margin-top: 1em;
+    padding: 0.5em;
+}
+
 
 
 /* helper */
