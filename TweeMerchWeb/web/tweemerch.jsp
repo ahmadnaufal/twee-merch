@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="twitter.MyStatus"%>
 <%@page import="twitter.TweetGet"%>
 <%@page import="twitter4j.Status"%>
@@ -26,9 +27,10 @@
         <div class="items">
             <% for (MyStatus tweet : tweets) { %>
                 <%
-                    InformationExtraction ie = new InformationExtraction("Jual Intel Skylake 6500 rp 2.700.000 kontak 081212341234 atau jualan@gmail.com");
+                    InformationExtraction ie = new InformationExtraction(tweet.getTweet());
                     ie.ieAll();
                     InformationSell infoSell = ie.getInformationSell();
+                    DecimalFormat df = new DecimalFormat("#");
                 %>
                 <div class="item clearfix">
                     <div class="seller-img">
@@ -41,9 +43,11 @@
                                 <%= tweet.getUsername()%>
                             </a>
                         </div>
-                        <div class="item-name"><span class="item-attr">Barang</span><%= infoSell.getItemName()%></div>
-                        <div class="price"><span class="item-attr">Harga</span><%= infoSell.getPrice()%></div>
-                        <div class="contact"><span class="item-attr">Kontak</span><%= infoSell.getPhone()%></div>
+                        <div class="item-name"><span class="item-attr">Barang</span> <%= infoSell.getItemName()%></div>
+                        <div class="price"><span class="item-attr">Harga</span>
+                            <%= infoSell.getPrice() == 0 ? "-" : df.format(infoSell.getPrice()) %>
+                        </div>
+                        <div class="contact"><span class="item-attr">Kontak</span> <%= infoSell.getPhone()%></div>
                         <% if (infoSell.getLink().contains("http")) {%>
                         <div><a href="<%= infoSell.getLink()%>">Laman Jual</a></div>
                         <% }%>
