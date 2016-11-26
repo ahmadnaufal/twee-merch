@@ -36,13 +36,17 @@
                     InformationSell infoSell = ie.getInformationSell();
                 %>
                 
-                <a href="https://twitter.com/<%= tweet.getUser().getScreenName() %>/status/<%= tweet.getId() %>" class="item clearfix">
+                <div class="item clearfix">
                     <div class="seller-img">
                         <img src="<%= tweet.getUser().getProfileImageURLHttps() %>" alt="">
                     </div>
 
                     <div class="item-info">
-                        <div class="seller-name"><%= tweet.getUser().getName() %></div>
+                        <div class="seller-name">
+                            <a href="https://twitter.com/<%= tweet.getUser().getScreenName() %>/status/<%= tweet.getId() %>">
+                                <%= tweet.getUser().getName() %>
+                            </a>
+                        </div>
                         <div class="item-name"><span class="item-attr">Barang</span><%= infoSell.getItemName() %></div>
                         <div class="price"><span class="item-attr">Harga</span><%= infoSell.getPrice() %></div>
                         <div class="contact"><span class="item-attr">Kontak</span><%= infoSell.getPhone() %></div>
@@ -54,7 +58,7 @@
                             </div>
                         </div>
                     </div>
-                </a>
+                </div>
                 
             <% } %>
         </div>

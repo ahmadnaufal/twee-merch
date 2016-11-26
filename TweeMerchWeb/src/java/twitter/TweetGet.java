@@ -32,12 +32,14 @@ public class TweetGet {
                 .setOAuthAccessTokenSecret("bn8EQoOyGSRVUNX6elTmX9Wt9jiFJaxDaCZDk3U3hQB0g");
 
         Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+        Query query = new Query(queryString);
+        query.setCount(20);
+        QueryResult result;
         try {
-            Query query = new Query(queryString);
-            QueryResult result;
-            
-            result = twitter.search(query);
-            tweets = result.getTweets();
+//            do {
+                result = twitter.search(query);
+                tweets = result.getTweets();
+//            } while ((query = result.nextQuery()) != null);
             
         } catch (TwitterException te) {
             te.printStackTrace();
