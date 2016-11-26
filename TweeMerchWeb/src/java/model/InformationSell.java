@@ -92,6 +92,4 @@ public class InformationSell {
         this.picture = picture;
     }
     private BufferedImage picture;
-    
-    
 }

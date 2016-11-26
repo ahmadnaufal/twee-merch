@@ -1,3 +1,4 @@
+<%@page import="twitter.MyStatus"%>
 <%@page import="twitter.TweetGet"%>
 <%@page import="twitter4j.Status"%>
 <%@page import="java.util.List"%>
@@ -19,32 +20,26 @@
             TweetGet tweetGet = new TweetGet();
             tweetGet.query("jual");
             
-            List<Status> tweets = tweetGet.getTweet();
-            for (Status tweet : tweets) {
-                System.out.println(tweet);
-            }
-            // InformationExtraction ie = new InformationExtraction();
-            // ie.ieAll();  
-            // InformationSell infoSell = ie.getInformationSell();
+            List<MyStatus> tweets = tweetGet.getTweet();
         %>
         
         <div class="items">
-            <% for (Status tweet: tweets) { %>
+            <% for (MyStatus tweet: tweets) { %>
                 <%
-                    InformationExtraction ie = new InformationExtraction(tweet.getText());
+                    InformationExtraction ie = new InformationExtraction(tweet.getTweet().toLowerCase());
                     ie.ieAll();  
                     InformationSell infoSell = ie.getInformationSell();
                 %>
                 
                 <div class="item clearfix">
                     <div class="seller-img">
-                        <img src="<%= tweet.getUser().getProfileImageURLHttps() %>" alt="">
+                        <img src="<%= tweet.getImageUrl() %>" alt="">
                     </div>
 
                     <div class="item-info">
                         <div class="seller-name">
-                            <a href="https://twitter.com/<%= tweet.getUser().getScreenName() %>/status/<%= tweet.getId() %>">
-                                <%= tweet.getUser().getName() %>
+                            <a href="https://twitter.com/<%= tweet.getUserScreenName() %>/status/<%= tweet.getStatusId() %>">
+                                <%= tweet.getUsername() %>
                             </a>
                         </div>
                         <div class="item-name"><span class="item-attr">Barang</span><%= infoSell.getItemName() %></div>
@@ -57,7 +52,7 @@
                             <div class="original-tweet">
                                 <strong>Original Tweet</strong>
                                 <br>
-                                <%= tweet.getText() %>
+                                <%= tweet.getTweet() %>
                             </div>
                         </div>
                     </div>

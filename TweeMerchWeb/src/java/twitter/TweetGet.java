@@ -5,6 +5,7 @@
  */
 package twitter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +48,20 @@ public class TweetGet {
         }
     }
     
-    public List<Status> getTweet() {
-        return tweets;
+    public List<MyStatus> getTweet() {
+        List<MyStatus> stats = new ArrayList<>();
+        for (Status tweet : tweets) {
+            MyStatus myStatus = new MyStatus();
+            myStatus.setClassification(1);
+            myStatus.setTweet(tweet.getText());
+            myStatus.setStatusId(tweet.getId());
+            myStatus.setUsername(tweet.getUser().getName());
+            myStatus.setUserScreenName(tweet.getUser().getScreenName());
+            myStatus.setImageUrl(tweet.getUser().getProfileImageURLHttps());
+            
+            stats.add(myStatus);
+        }
+        
+        return stats;
     }
 }
