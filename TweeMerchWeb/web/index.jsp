@@ -1,5 +1,10 @@
-<%@ page import="information_extraction.InformationExtraction" %>
-<%@ page import="model.InformationSell" %>
+<%@page import="twitter.TweetGet"%>
+<%@page import="twitter4j.Status"%>
+<%@page import="java.util.List"%>
+<%@page import="information_extraction.InformationExtraction" %>
+<%@page import="model.InformationSell" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <jsp:include page="template/header.jsp" />
 
@@ -10,39 +15,41 @@
         </div>
         
         <%
-            String tweet = "Di jual parfum oriflame giordani man notte ..... Harga 385000 area tembilahan https://t.co/2k4GwNywhu";
-            InformationExtraction ie = new InformationExtraction(tweet.toLowerCase());
-            ie.ieAll();
             
-            InformationSell infoSell = ie.getInformationSell();
+            TweetGet tweetGet = new TweetGet();
+            tweetGet.query("jual");
+            
+            List<Status> tweets = tweetGet.getTweet();
+            for (Status tweet : tweets) {
+                System.out.println(tweet);
+            }
+            // InformationExtraction ie = new InformationExtraction();
+            // ie.ieAll();  
+            // InformationSell infoSell = ie.getInformationSell();
         %>
         
         <div class="items">
-            <a href="https://twitter.com" class="item clearfix">
-                <div class="seller-img">
-                    <img src="https://pbs.twimg.com/profile_images/793261462043045888/3RwOQuE8_bigger.jpg" alt="">
-                </div>
+            <% for (Status tweet: tweets) { %>
+                <%
+                    InformationExtraction ie = new InformationExtraction(tweet.getText());
+                    ie.ieAll();  
+                    InformationSell infoSell = ie.getInformationSell();
+                %>
+                
+                <a href="https://twitter.com/<%= tweet.getUser().getScreenName() %>/status/<%= tweet.getId() %>" class="item clearfix">
+                    <div class="seller-img">
+                        <img src="<%= tweet.getUser().getProfileImageURLHttps() %>" alt="">
+                    </div>
 
-                <div class="item-info">
-                    <div class="seller-name">Boby</div>
-                    <div class="item-name"><span class="item-attr">Barang</span> <%= infoSell.getItemName() %></div>
-                    <div class="price"><span class="item-attr">Harga</span> <%= infoSell.getPrice().toString() %></div>
-                    <div class="contact"><span class="item-attr">Kontak</span> <%= infoSell.getPhone() %></div>
-                </div>
-            </a>
-
-            <a href="https://twitter.com" class="item clearfix">
-                <div class="seller-img">
-                    <img src="https://pbs.twimg.com/profile_images/793261462043045888/3RwOQuE8_bigger.jpg" alt="">
-                </div>
-
-                <div class="item-info">
-                    <div class="seller-name">Boby</div>
-                    <div class="item-name"><span class="item-attr">Barang</span> <%= infoSell.getItemName() %></div>
-                    <div class="price"><span class="item-attr">Harga</span> <%= infoSell.getPrice().toString() %></div>
-                    <div class="contact"><span class="item-attr">Kontak</span> <%= infoSell.getPhone() %></div>
-                </div>
-            </a>
+                    <div class="item-info">
+                        <div class="seller-name"><%= tweet.getUser().getName() %></div>
+                        <div class="item-name"><span class="item-attr">Barang</span><%= infoSell.getItemName() %></div>
+                        <div class="price"><span class="item-attr">Harga</span><%= infoSell.getPrice() %></div>
+                        <div class="contact"><span class="item-attr">Kontak</span><%= infoSell.getPhone() %></div>
+                    </div>
+                </a>
+                
+            <% } %>
         </div>
     </div>
     
