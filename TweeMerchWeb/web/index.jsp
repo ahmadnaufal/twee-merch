@@ -31,7 +31,7 @@
         <div class="items">
             <% for (Status tweet: tweets) { %>
                 <%
-                    InformationExtraction ie = new InformationExtraction(tweet.getText().toLowerCase());
+                    InformationExtraction ie = new InformationExtraction(tweet.getText());
                     ie.ieAll();  
                     InformationSell infoSell = ie.getInformationSell();
                 %>
