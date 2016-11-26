@@ -130,4 +130,20 @@ public class Preprocessor {
         String removedCurrency = sentence.replaceAll("(harga|rp|idr)(\\.|,| )*(\\d)(\\d+|\\.|,|ribu|ratus|juta|jt|k|rb| )*", " nozharga ");
         return removedCurrency;
     }
+    
+    
+    public static String preProcessString(String data) {
+        IndonesianSentenceFormalization sentenceFormalization = new IndonesianSentenceFormalization();
+        sentenceFormalization.initStopword();
+        
+        String preprocessed = data;
+        preprocessed = removeCurrency(preprocessed);
+        preprocessed = sentenceFormalization.normalizeSentence(preprocessed);
+        preprocessed = sentenceFormalization.deleteStopword(preprocessed);
+        
+        IndonesianStemmer stemmer = new IndonesianStemmer();
+        preprocessed = stemmer.stemSentence(preprocessed);
+        
+        return preprocessed;
+    }
 }
