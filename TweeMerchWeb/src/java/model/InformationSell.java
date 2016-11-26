@@ -19,7 +19,7 @@ public class InformationSell {
     private String phone;       // Done
     private String email;       // Done
     private String link;        // Done
-    private Map contacts;
+    private String imageLink;
     
     public InformationSell(){}
     
@@ -75,21 +75,12 @@ public class InformationSell {
     public void setLink(String link) {
         this.link = link;
     }
-
-    public Map getContacts() {
-        return contacts;
+    
+    public String getImageLink() {
+        return imageLink;
     }
 
-    public void setContacts(Map contacts) {
-        this.contacts = contacts;
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
-
-    public BufferedImage getPicture() {
-        return picture;
-    }
-
-    public void setPicture(BufferedImage picture) {
-        this.picture = picture;
-    }
-    private BufferedImage picture;
 }

@@ -26,9 +26,13 @@
         <div class="items">
             <% for (MyStatus tweet: tweets) { %>
                 <%
-                    InformationExtraction ie = new InformationExtraction(tweet.getTweet().toLowerCase());
+                    InformationExtraction ie = new InformationExtraction(tweet.getTweet());
                     ie.ieAll();  
+                    
                     InformationSell infoSell = ie.getInformationSell();
+                    if(infoSell.getLink()!=null){
+                        ie.crawlLink();
+                    }
                 %>
                 
                 <div class="item clearfix">
@@ -47,6 +51,13 @@
                         <div class="contact"><span class="item-attr">Kontak</span><%= infoSell.getPhone() %></div>
                         <% if(infoSell.getLink().contains("http")){ %>
                             <div><a href="<%= infoSell.getLink() %>">Laman Jual</a></div>
+                        <% } %>
+                        <% if(infoSell.getImageLink()!=null) { %>
+                        <div class="original">
+                            <div class="original-tweet">
+                                <img src="<%= infoSell.getImageLink() %>">
+                            </div>
+                        </div>
                         <% } %>
                         <div class="original">
                             <div class="original-tweet">
