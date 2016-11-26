@@ -18,7 +18,7 @@
         <%
             
             TweetGet tweetGet = new TweetGet();
-            tweetGet.query("jual");
+            tweetGet.query("jual harga");
             
             List<MyStatus> tweets = tweetGet.getTweet();
         %>

@@ -15,7 +15,7 @@ import model.InformationSell;
  */
 public class InformationExtraction {
     
-    public final static String REGEX_PRICE = "(rp|idr|harga)(\\.|,| )*(\\d)(\\d+|\\.|,)*( ?ribu| ?ratus| ?juta| ?k| ?rb| ?jt)*";
+    public final static String REGEX_PRICE = "(rp|idr|harga)(\\.|,| |:)*(\\d)(\\d+|\\.|,)*( ?ribu| ?ratus| ?juta| ?k| ?rb| ?jt)*";
     public final static String REGEX_NOMINAL = "[\\d|\\.]+";
     public final static String REGEX_PHONE = "(08|\\+?628|02\\d)(\\d{9,11})";
     public final static String REGEX_MAIL = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
@@ -77,7 +77,7 @@ public class InformationExtraction {
         String extractHarga;
         Double harga= 0.0;
         Pattern pattern = Pattern.compile(REGEX_PRICE);
-        Matcher matcher = pattern.matcher(tweet);
+        Matcher matcher = pattern.matcher(tweet.toLowerCase());
         
         if(matcher.find()){
             extractHarga = matcher.group(0);
@@ -96,7 +96,9 @@ public class InformationExtraction {
         Matcher matcher = pattern.matcher(harga);
         
         if(matcher.find()){
-            temp = Double.parseDouble(matcher.group(0));
+            String nominal = matcher.group(0);
+            nominal = nominal.replaceAll("\\.", "");
+            temp = Double.parseDouble(nominal);
         }
         
         if(endPoint != null){
@@ -227,18 +229,19 @@ public class InformationExtraction {
     
     public void crawlLink(){
         HttpReq hreq = new HttpReq();
-        
-        hreq.getReq(infoSell.getLink());
-        
-        if(!hreq.getResponse().isEmpty()){
-            if(!hreq.getResponse().contains("<body>")){
-                String innerLink = extractLink(hreq.getResponse());
-                hreq.getReq(innerLink);
-            }
+        if(infoSell.getLink()!=null&&!infoSell.getLink().equals("-")){
+            hreq.getReq(infoSell.getLink());
 
-            String imageLink = matchRegex(REGEX_LINK_BUKALAPAK_IMG, hreq.getResponse());
-            if(!imageLink.isEmpty()){
-                infoSell.setImageLink(imageLink);
+            if(!hreq.getResponse().isEmpty()){
+                if(!hreq.getResponse().contains("<body>")){
+                    String innerLink = extractLink(hreq.getResponse());
+                    hreq.getReq(innerLink);
+                }
+
+                String imageLink = matchRegex(REGEX_LINK_BUKALAPAK_IMG, hreq.getResponse());
+                if(!imageLink.isEmpty()){
+                    infoSell.setImageLink(imageLink);
+                }
             }
         }
     }

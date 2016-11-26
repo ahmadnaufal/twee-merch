@@ -16,7 +16,7 @@ public class Main {
     
     public static void main(String[] args) {
         
-        String tweet = "Jual Iphone 5 16gb ios 10 https://t.co/LAaV1UuZpM";
+        String tweet = "Jual Intel Skylake 6500 rp 2.700.000 kontak 081212341234 atau jualan@gmail.com";
         InformationExtraction ie = new InformationExtraction(tweet);
         ie.ieAll();
         ie.crawlLink();
